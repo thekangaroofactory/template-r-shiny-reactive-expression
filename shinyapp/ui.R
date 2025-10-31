@@ -26,21 +26,36 @@ page_navbar(
   nav_panel(title = "Filter",
             class = "p-5",
 
-            # -- content
-            p("Goal: pass filter condition to a module server,", br(),
-              "happen a module internal condition and apply the filter on a data.frame"),
+            # -- text & inputs
+            layout_columns(
 
-            p("The module server internal condition is work == TRUE", br(),
-              "original data.frame has rows with FALSE (see module server code)"),
+              # -- details
+              tagList(
+                p("Goal: pass filter condition to a module server,", br(),
+                  "happen a module internal condition and apply the filter on a data.frame"),
 
-            p("Additional conditions may be added from outside the module server:"),
+                p("The module server internal condition is work == TRUE", br(),
+                  "original data.frame has rows with FALSE (see module server code)")),
 
-            # -- input
-            checkboxGroupInput(inputId = "conditions",
-                               label = "Conditions",
-                               choices = NULL),
+              # -- input
+              card(
+                card_header("User filter"),
+                p("Additional conditions may be added from outside the module server:"),
+                checkboxGroupInput(inputId = "conditions",
+                                   label = "Conditions",
+                                   choices = NULL))),
 
-            # -- table
-            DT::DTOutput("filtered_df"))
+            # -- tables
+            layout_columns(
+
+               # -- raw
+              card(
+                card_header("Raw table"),
+                DT::DTOutput(NS(namespace = "data", id = "raw_df"))),
+
+              # -- filter
+              card(
+                card_header("Filter table"),
+                DT::DTOutput("filtered_df"))))
 
 )

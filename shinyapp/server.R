@@ -31,7 +31,7 @@ function(input, output, session) {
   cond <- reactive(conditions[as.numeric(input$conditions)])
 
   # -- call module server
-  rv <- module_server(id = "test", cond = cond)
+  rv <- module_server(id = "data", cond = cond)
 
   # -- output (table)
   output$filtered_df <- DT::renderDT(rv())

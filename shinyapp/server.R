@@ -13,15 +13,27 @@ function(input, output, session) {
 
   cat("Starting application server... \n")
 
-  # -- Debug mode
-  if(isTRUE(Sys.getenv("DEBUG")))
-    cat("[i] ***** DEBUG mode is ON ***** \n")
+  # -- available conditions
+  choices <- c("value == 20" = 1, "name == mango" = 2, "id == 1" = 3)
+  conditions <- c(rlang::expr(value == 20),
+                  rlang::expr(name == "mango"),
+                  rlang::expr(id == 1))
 
+  # -- init input
+  updateCheckboxGroupInput(inputId = "conditions",
+                           choices = choices)
 
   # --------------------------------------
-  # Something_cool_goes_here
+  # Observe input
   # --------------------------------------
 
+  # -- get the expression(s)
+  cond <- reactive(conditions[as.numeric(input$conditions)])
 
+  # -- call module server
+  rv <- module_server(id = "test", cond = cond)
+
+  # -- output (table)
+  output$filtered_df <- DT::renderDT(rv())
 
 }
